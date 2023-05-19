@@ -19,6 +19,7 @@ public class CreditAccount extends Account {
      * @param rate           - неотрицательное число, ставка кредитования для расчёта долга за отрицательный баланс
      */
     public CreditAccount(int initialBalance, int creditLimit, int rate) {
+
         if (rate <= 0) {
             throw new IllegalArgumentException(
                     "Накопительная ставка не может быть отрицательной, а у вас: " + rate
@@ -54,6 +55,7 @@ public class CreditAccount extends Account {
         }
     }
 
+
     /**
      * Операция пополнения карты на указанную сумму.
      * В результате успешного вызова этого метода, баланс должен увеличиться
@@ -75,6 +77,7 @@ public class CreditAccount extends Account {
         return true;
     }
 
+
     /**
      * Операция расчёта процентов на отрицательный баланс счёта при условии, что
      * счёт не будет меняться год. Сумма процентов приводится к целому
@@ -88,6 +91,7 @@ public class CreditAccount extends Account {
     public int yearChange() {
         return balance / 100 * rate;
     }
+
 
     public int getCreditLimit() {
         return creditLimit;

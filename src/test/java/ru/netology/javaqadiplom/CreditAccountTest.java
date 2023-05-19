@@ -7,7 +7,29 @@ public class CreditAccountTest {
 
 
     @Test
-    public void testCreditAccountException() {
+    public void testCreditAccountExceptionInitialBalance() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new CreditAccount(
+                    -100,
+                    5_000,
+                    15);
+        });
+    }
+
+    @Test
+    public void testCreditAccountExceptionCreditLimit() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new CreditAccount(
+                    0,
+                    -5_000,
+                    15);
+        });
+    }
+
+    @Test
+    public void testCreditAccountExceptionRate() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new CreditAccount(
@@ -18,7 +40,7 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void shouldAddToNullBalance() {
+    public void shouldAddToNullBalancePositiveAmount() {
         CreditAccount account = new CreditAccount(
                 0,
                 5_000,
@@ -31,7 +53,7 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void shouldAddToNullBalanceTwo() {
+    public void shouldAddToNullBalanceNegativeAmount() {
         CreditAccount account = new CreditAccount(
                 0,
                 5_000,
@@ -44,20 +66,20 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void shouldAddToNegativeBalance() {
+    public void shouldAddToPositiveBalanceNegativeAmount() {
         CreditAccount account = new CreditAccount(
-                -1_000,
+                1_000,
                 5_000,
                 15
         );
 
-        account.add(3_000);
+        account.add(-3_000);
 
-        Assertions.assertEquals(2_000, account.getBalance());
+        Assertions.assertEquals(1000, account.getBalance());
     }
 
     @Test
-    public void shouldAddToPositiveBalance() {
+    public void shouldAddToPositiveBalancePositiveAmount() {
         CreditAccount account = new CreditAccount(
                 1_000,
                 5_000,
@@ -70,7 +92,7 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void cardPaymentsPositiveBalance() {
+    public void cardPaymentsPositiveBalancePositiveAmount() {
         CreditAccount account = new CreditAccount(
                 3_000,
                 5_000,
@@ -83,7 +105,7 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void cardPaymentsPositiveBalanceTwo() {
+    public void cardPaymentsPositiveBalanceNegativeAmount() {
         CreditAccount account = new CreditAccount(
                 3_000,
                 5_000,
@@ -96,7 +118,20 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void cardPaymentsNullBalance() {
+    public void cardPaymentsPositiveBalanceMoreCreditLimit() {
+        CreditAccount account = new CreditAccount(
+                3_000,
+                5_000,
+                15
+        );
+
+        account.pay(9_000);
+
+        Assertions.assertEquals(3000, account.getBalance());
+    }
+
+    @Test
+    public void cardPaymentsNullBalancePositiveAmount() {
         CreditAccount account = new CreditAccount(
                 0,
                 5_000,
@@ -109,68 +144,55 @@ public class CreditAccountTest {
     }
 
     @Test
-    public void cardPaymentsNegativeBalanceLessCreditLimit() {
+    public void cardPaymentsNullBalanceEqualsCreditLimit() {
         CreditAccount account = new CreditAccount(
-                -1_000,
+                0,
                 5_000,
                 15
         );
 
-        account.pay(3_000);
+        account.pay(5_000);
 
-        Assertions.assertEquals(-4000, account.getBalance());
+        Assertions.assertEquals(0, account.getBalance());
     }
 
     @Test
-    public void cardPaymentsNegativeBalanceEqualsCreditLimit() {
+    public void cardPaymentsNullBalanceMoreCreditLimit() {
         CreditAccount account = new CreditAccount(
-                -2_000,
+                0,
                 5_000,
                 15
         );
 
-        account.pay(3_000);
+        account.pay(6_000);
 
-        Assertions.assertEquals(-2000, account.getBalance());
-    }
-
-    @Test
-    public void cardPaymentsNegativeBalanceMoreCreditLimit() {
-        CreditAccount account = new CreditAccount(
-                -3_000,
-                5_000,
-                15
-        );
-
-        account.pay(3_000);
-
-        Assertions.assertEquals(-3000, account.getBalance());
+        Assertions.assertEquals(0, account.getBalance());
     }
 
     @Test
     public void calculatingInterestOnANegativeBalance() {
         CreditAccount account = new CreditAccount(
-                -200,
+                200,
                 5_000,
                 15
         );
-
+        account.pay(400);
         account.yearChange();
 
-        Assertions.assertEquals(-30, account.getCreditLimit());
+        Assertions.assertEquals(-30, account.getBalance());
     }
 
     @Test
     public void calculatingInterestOnAPositiveBalance() {
         CreditAccount account = new CreditAccount(
-                200,
+                400,
                 5_000,
                 15
         );
-
+        account.pay(200);
         account.yearChange();
 
-        Assertions.assertEquals(0, account.getCreditLimit());
+        Assertions.assertEquals(0, account.getBalance());
     }
 
     @Test
@@ -180,10 +202,10 @@ public class CreditAccountTest {
                 5_000,
                 15
         );
-
+        account.pay(200);
         account.yearChange();
 
-        Assertions.assertEquals(0, account.getCreditLimit());
+        Assertions.assertEquals(0, account.getBalance());
     }
 
     @Test
@@ -197,6 +219,7 @@ public class CreditAccountTest {
         account.setRate(10);
 
         Assertions.assertEquals(10, account.getRate());
+        Assertions.assertEquals(5000, account.getCreditLimit());
     }
 
     @Test
