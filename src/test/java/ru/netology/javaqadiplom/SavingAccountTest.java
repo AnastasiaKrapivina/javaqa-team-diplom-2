@@ -55,7 +55,7 @@ public class SavingAccountTest {
             );
         });
     }
-    
+
 
     @Test
     public void shouldNotCreateAccountWithMaxBalanceLessThanMinBalance() {
