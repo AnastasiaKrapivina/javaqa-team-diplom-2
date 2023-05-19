@@ -55,20 +55,7 @@ public class SavingAccountTest {
             );
         });
     }
-
-  /*  @Test
-    public void shouldNotCreateAccountWithNegativeRate2() {
-        SavingAccount account = new SavingAccount(
-                1,
-                0,
-                100_000,
-                -1
-        );
-
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            account.getRate();
-        });
-    }*/
+    
 
     @Test
     public void shouldNotCreateAccountWithMaxBalanceLessThanMinBalance() {
@@ -125,7 +112,7 @@ public class SavingAccountTest {
         Assertions.assertEquals(5_000, account.getBalance());
     }
 
-    @Test  // пополнение счёта (не дойдя до максимального баланса)
+    @Test  // пополнение счёта (не превысив максимальный баланс)
     public void shouldAddLessThanMaxBalance() {
         SavingAccount account = new SavingAccount(
                 2_000,
