@@ -20,9 +20,19 @@ public class CreditAccount extends Account {
      */
     public CreditAccount(int initialBalance, int creditLimit, int rate) {
 
-        if (rate <= 0) {
+        if (rate < 0) {
             throw new IllegalArgumentException(
                     "Накопительная ставка не может быть отрицательной, а у вас: " + rate
+            );
+        }
+        if (initialBalance < 0) {
+            throw new IllegalArgumentException(
+                    "Баланс не может быть отрицательным, а у вас: " + initialBalance
+            );
+        }
+        if (creditLimit < 0) {
+            throw new IllegalArgumentException(
+                    "Максимальная сумма задолженности не может быть отрицательной, а у вас: " + creditLimit
             );
         }
         this.balance = initialBalance;
@@ -46,9 +56,8 @@ public class CreditAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        balance = balance - amount;
-        if (balance > -creditLimit) {
-            balance = -amount;
+        if (balance - amount > -creditLimit) {
+            balance = balance - amount;
             return true;
         } else {
             return false;
@@ -73,7 +82,7 @@ public class CreditAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        balance = amount;
+        balance = balance + amount;
         return true;
     }
 
@@ -89,7 +98,13 @@ public class CreditAccount extends Account {
      */
     @Override
     public int yearChange() {
-        return balance / 100 * rate;
+        if (balance < 0) {
+            balance = balance / 100 * rate;
+            return balance;
+        } else {
+            balance = 0;
+            return balance;
+        }
     }
 
 
