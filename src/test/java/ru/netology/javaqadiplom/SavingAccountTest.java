@@ -111,6 +111,18 @@ public class SavingAccountTest {
 
         Assertions.assertEquals(5_000, account.getBalance());
     }
+    @Test
+    public void shouldNotPayWithBalanceLessMinNegativeAmount() {
+        SavingAccount account = new SavingAccount(
+                5_000,
+                1_000,
+                10_000,
+                5
+        );
+        account.pay(-2_000);
+
+        Assertions.assertEquals(5_000, account.getBalance());
+    }
 
     @Test  // пополнение счёта (не превысив максимальный баланс)
     public void shouldAddLessThanMaxBalance() {
@@ -151,7 +163,20 @@ public class SavingAccountTest {
 
         account.add(8_001);
 
-        Assertions.assertEquals(2_000 + 8_001, account.getBalance());
+        Assertions.assertEquals(2_000, account.getBalance());
+    }
+    @Test
+    public void shouldNotAddMoreThanMaxBalanceNegativeAmount() {
+        SavingAccount account = new SavingAccount(
+                2_000,
+                1_000,
+                10_000,
+                5
+        );
+
+        account.add(-100);
+
+        Assertions.assertEquals(2_000, account.getBalance());
     }
 
     @Test
@@ -166,5 +191,17 @@ public class SavingAccountTest {
         account.yearChange();
 
         Assertions.assertEquals(200 / 100 * 15, account.getBalance());
+    }
+    @Test
+    public void testSavingAccountAccountData() {
+        SavingAccount account = new SavingAccount(
+                200,
+                1_000,
+                10_000,
+                15
+        );
+
+        Assertions.assertEquals(1_000, account.getMinBalance());
+        Assertions.assertEquals(10_000, account.getMaxBalance());
     }
 }
