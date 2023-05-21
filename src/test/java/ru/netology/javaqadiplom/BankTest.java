@@ -3,8 +3,6 @@ package ru.netology.javaqadiplom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BankTest {
 
     @Test // Операция перевода указанной суммы с from на to
@@ -15,6 +13,7 @@ class BankTest {
         Assertions.assertEquals(3500, account.getFrom());
         Assertions.assertEquals(2500, account.getTo());
     }
+
     @Test // Операция перевода указанной суммы с from на to
     public void transferOfTheSpecifiedNegativeAmount() {
         Bank account = new Bank(4000, 2000);
@@ -41,6 +40,7 @@ class BankTest {
         Assertions.assertEquals(2000, account.getFrom());
         Assertions.assertEquals(4000, account.getTo());
     }
+
     @Test // Операция перевода указанной суммы с from на to
     public void transferNegativeFromPositiveAmount() {
         Bank account = new Bank(-4000, 4000);

@@ -17,10 +17,11 @@ public class Bank {
     protected int from;
     protected int to;
 
-    public Bank (int from, int to) {
+    public Bank(int from, int to) {
         this.from = from;
         this.to = to;
     }
+
     public boolean transfer(int amount) {
         if (amount <= 0) {
             return false;
@@ -36,6 +37,7 @@ public class Bank {
         }
         return true;
     }
+
     public int getFrom() {
         return from;
     }
