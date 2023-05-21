@@ -19,9 +19,20 @@ public class CreditAccount extends Account {
      * @param rate           - неотрицательное число, ставка кредитования для расчёта долга за отрицательный баланс
      */
     public CreditAccount(int initialBalance, int creditLimit, int rate) {
-        if (rate <= 0) {
+
+        if (rate < 0) {
             throw new IllegalArgumentException(
                     "Накопительная ставка не может быть отрицательной, а у вас: " + rate
+            );
+        }
+        if (initialBalance < 0) {
+            throw new IllegalArgumentException(
+                    "Баланс не может быть отрицательным, а у вас: " + initialBalance
+            );
+        }
+        if (creditLimit < 0) {
+            throw new IllegalArgumentException(
+                    "Максимальная сумма задолженности не может быть отрицательной, а у вас: " + creditLimit
             );
         }
         this.balance = initialBalance;
@@ -39,19 +50,20 @@ public class CreditAccount extends Account {
      * @param amount - сумма покупки
      * @return true если операция прошла успешно, false иначе.
      */
+
     @Override
     public boolean pay(int amount) {
         if (amount <= 0) {
             return false;
         }
-        balance = balance - amount;
-        if (balance > -creditLimit) {
-            balance = -amount;
+        if (balance - amount > -creditLimit) {
+            balance = balance - amount;
             return true;
         } else {
             return false;
         }
     }
+
 
     /**
      * Операция пополнения карты на указанную сумму.
@@ -70,9 +82,10 @@ public class CreditAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        balance = amount;
+        balance = balance + amount;
         return true;
     }
+
 
     /**
      * Операция расчёта процентов на отрицательный баланс счёта при условии, что
@@ -85,8 +98,15 @@ public class CreditAccount extends Account {
      */
     @Override
     public int yearChange() {
-        return balance / 100 * rate;
+        if (balance < 0) {
+            balance = balance / 100 * rate;
+            return balance;
+        } else {
+            balance = 0;
+            return balance;
+        }
     }
+
 
     public int getCreditLimit() {
         return creditLimit;
